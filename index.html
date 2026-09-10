@@ -22,7 +22,7 @@
     
     <script type = "module">
             const { createApp } = Vue;
-            createApp({
+            const myApp = createApp({
                 data() {
                     return {
                         message: 'Hello Vue!',
@@ -39,8 +39,13 @@
                             },
                         ]
                     }
+                },
+                created(){
+                    //nothing here yet
                 }
-            }).mount('#app');
+            })
+            
+            myApp.mount('#app');
     </script>
 </body>
 </html>
