@@ -13,9 +13,14 @@
     <div id="app">
         {{ message }}
 
-        <p>Here are some artists:
-            <li v-for = "artist in artists" :key="artist.name">
-               {{artist.name}} {{artist.surname}} was born in {{artist.yearOfBirth}}.
+        <p>Here are some artists from the server:
+            <li v-for = "artist in serverArtists" >
+               {{artist.firstName}} {{artist.lastName}} was born in {{artist.yearOfBirth}}.
+            </li>
+        </p>
+        <p>Here are some artists from the database:
+            <li v-for = "artist in dbArtists" >
+               {{artist.firstName}} {{artist.lastName}} was born in {{artist.yearOfBirth}}.
             </li>
         </p>
     </div>
@@ -26,22 +31,53 @@
                 data() {
                     return {
                         message: 'Hello Vue!',
-                        artists: [
+                        serverArtists: [
                             {
-                                name: "Dave", 
-                                surname: "Smith",
+                                firstName: "Dave", 
+                                lastName: "Smith",
                                 yearOfBirth: 1993
                             },
                             {
-                                name: "Susan", 
-                                surname: "Parker",
+                                firstName: "Susan", 
+                                lastName: "Parker",
+                                yearOfBirth: 1982
+                            },
+                        ],
+                        
+                        dbArtists: [
+                            {
+                                firstName: "Dave", 
+                                lastName: "Smith",
+                                yearOfBirth: 1993
+                            },
+                            {
+                                firstName: "Susan", 
+                                lastName: "Parker",
                                 yearOfBirth: 1982
                             },
                         ]
                     }
                 },
-                created(){
+                created: function(){
                     //nothing here yet
+                    console.log("app created");
+                    this.fetchData();
+                   // this.artists = await fetch("http://localhost:4000/message").json();
+
+                    this.message = "aha now the message is different";
+                   // this.artists = [];
+                },
+
+                methods: {
+                    async fetchData(){
+                        const response = await fetch("http://localhost:4000/message");
+                        const data = await response.json();
+                        this.serverArtists = data;
+
+                        const response2 = await fetch("http://localhost:4000/ping");
+                        const data2 = await response2.json();
+                        this.dbArtists = data2;
+                    }
                 }
             })
             
